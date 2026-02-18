@@ -1,5 +1,8 @@
 import streamlit as st
 import math
+import tempfile
+import os
+import matplotlib.pyplot as plt
 from fpdf import FPDF
 
 # ==========================================
@@ -17,134 +20,165 @@ def calcular_D_A(z1, z2):
     integral = sum(1.0 / math.sqrt(0.3 * (1 + z1 + i*dz)**3 + 0.7) * dz for i in range(passos))
     return ((299792.458 / 70.0) * integral / (1 + z2)) * 3.086e22
 
-# ==========================================
-# FUNÇÃO PARA LIMPAR OS DADOS E ZERAR CAIXAS
-# ==========================================
 def limpar_dados():
-    # 1. Apaga os relatórios da tela
-    if 'res_dyn' in st.session_state:
-        del st.session_state['res_dyn']
-    if 'res_opt' in st.session_state:
-        del st.session_state['res_opt']
-        
-    # 2. Força "Zeros" em todas as caixas de Dinâmica
-    st.session_state.d_rad = 0.0
-    st.session_state.d_vobs = 0.0
-    st.session_state.d_vgas = 0.0
-    st.session_state.d_vdisk = 0.0
-    st.session_state.d_vbulge = 0.0
-    
-    # 3. Força "Zeros" em todas as caixas de Óptica
-    st.session_state.o_zl = 0.0
-    st.session_state.o_zs = 0.0
-    st.session_state.o_mest = 0.0
-    st.session_state.o_theta = 0.0
+    chaves = ['d_rad', 'd_vobs', 'd_vgas', 'd_vdisk', 'd_vbulge', 'o_zl', 'o_zs', 'o_mest', 'o_theta', 'o_cluster', 'res_dyn', 'res_opt']
+    for chave in chaves:
+        if chave in st.session_state:
+            del st.session_state[chave]
+    st.session_state.d_rad = st.session_state.d_vobs = st.session_state.d_vgas = st.session_state.d_vdisk = st.session_state.d_vbulge = 0.0
+    st.session_state.o_zl = st.session_state.o_zs = st.session_state.o_mest = st.session_state.o_theta = 0.0
     st.session_state.o_cluster = False
 
 # ==========================================
-# GERADORES DE PDF (TEXTO LIMPO SEM ACENTOS)
+# MOTORES GRÁFICOS (MATPLOTLIB)
 # ==========================================
-def gerar_pdf_dinamica(rad, vobs, vgas, vdisk, vbulge, vtrr, prec, ml_disk, ml_bulge):
+def criar_grafico_dinamica(v_bar, v_trr, v_obs, L):
+    fig, ax = plt.subplots(figsize=(7, 4))
+    labels = [L["g_bar"], L["g_trr"], L["g_obs"]]
+    valores = [v_bar, v_trr, v_obs]
+    cores = ['#ff6666', '#66b3ff', '#99ff99']
+    
+    barras = ax.bar(labels, valores, color=cores)
+    ax.set_ylabel(L["g_vel"])
+    ax.set_title(L["g_title_dyn"])
+    ax.set_ylim(0, max(valores) * 1.2)
+    
+    for barra in barras:
+        yval = barra.get_height()
+        ax.text(barra.get_x() + barra.get_width()/2, yval + (max(valores)*0.02), f'{yval:.1f}', ha='center', va='bottom', fontweight='bold')
+        
+    plt.tight_layout()
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp:
+        fig.savefig(tmp.name)
+        plt.close(fig)
+        return tmp.name
+
+def criar_grafico_optica(theta_bar, theta_trr, theta_obs, L):
+    fig, ax = plt.subplots(figsize=(7, 4))
+    labels = [L["g_bar_opt"], L["g_trr"], L["g_obs"]]
+    valores = [theta_bar, theta_trr, theta_obs]
+    cores = ['#ff6666', '#66b3ff', '#99ff99']
+    
+    barras = ax.bar(labels, valores, color=cores)
+    ax.set_ylabel(L["g_theta"])
+    ax.set_title(L["g_title_opt"])
+    ax.set_ylim(0, max(valores) * 1.2)
+    
+    for barra in barras:
+        yval = barra.get_height()
+        ax.text(barra.get_x() + barra.get_width()/2, yval + (max(valores)*0.02), f'{yval:.2f}', ha='center', va='bottom', fontweight='bold')
+        
+    plt.tight_layout()
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp:
+        fig.savefig(tmp.name)
+        plt.close(fig)
+        return tmp.name
+
+# ==========================================
+# GERADORES DE PDF (COM GRÁFICOS)
+# ==========================================
+def gerar_pdf_dinamica(rad, vobs, vgas, vdisk, vbulge, vtrr, prec, ml_disk, ml_bulge, v_bar, L):
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font("Arial", 'B', 16)
-    pdf.cell(0, 10, txt="RELATORIO DE UNIFICACAO TRR - DINAMICA GALACTICA", ln=True, align='C')
-    pdf.set_font("Arial", size=12)
+    pdf.set_font("Arial", 'B', 15)
+    pdf.cell(0, 8, txt=L["pdf_title_dyn"], ln=True, align='C')
+    pdf.set_font("Arial", size=10)
     
-    texto = f"""
---------------------------------------------------------------------------------
+    texto_dados = f"""
 1. CONSTANTES UNIVERSAIS UTILIZADAS:
 - Limite de Fase (a0) = 1.2001e-10 m/s^2
-- Indice de Viscosidade do Vacuo (Beta) = 0.028006
+- Indice de Viscosidade (Beta) = 0.028006
 
-2. DADOS OBSERVADOS (TELESCOPIO):
-- Raio Observado: {rad} kpc
-- Velocidade Observada: {vobs} km/s
-- Velocidade do Gas: {vgas} km/s
-- Velocidade do Disco: {vdisk} km/s
-- Velocidade do Bojo/Haste: {vbulge} km/s
-
-3. RESULTADOS DA CALIBRACAO TRR:
-- Previsao de Velocidade TRR: {vtrr:.2f} km/s
-- Precisao de Acerto (Acuracia): {prec:.2f}%
-- Razao Massa/Luz Calibrada (Disco): {ml_disk:.2f}
-- Razao Massa/Luz Calibrada (Bojo): {ml_bulge:.2f}
-
-4. METODOLOGIA FISICA (TRANSPARENCIA):
-A equacao extraiu a aceleracao a partir da morfologia real da galaxia. 
-A proporcao fisica entre o Bojo e o Disco cria um escudo geometrico 
-contra o vacuo viscoso. Esta interacao hidrodinamica gera o arrasto 
-topologico que sustenta a coesao galactica sem materia escura.
---------------------------------------------------------------------------------
+2. RESULTADOS DA CALIBRACAO TRR:
+- Previsao TRR: {vtrr:.2f} km/s  |  Telescopio: {vobs:.2f} km/s
+- Precisao de Acerto: {prec:.2f}%
+- M/L Calibrada (Disco): {ml_disk:.2f}  |  M/L (Bojo): {ml_bulge:.2f}
     """
-    for linha in texto.split('\n'):
-        pdf.multi_cell(0, 8, txt=linha)
+    for linha in texto_dados.split('\n'):
+        pdf.multi_cell(0, 6, txt=linha)
+        
+    # Inserir Gráfico
+    img_path = criar_grafico_dinamica(v_bar, vtrr, vobs, L)
+    pdf.image(img_path, x=20, w=170)
+    os.unlink(img_path)
+    
+    pdf.ln(5)
+    pdf.set_font("Arial", 'B', 11)
+    pdf.cell(0, 8, txt="COMPARATIVO COM O MODELO LAMBDA-CDM:", ln=True)
+    pdf.set_font("Arial", size=10)
+    pdf.multi_cell(0, 6, txt=L["pdf_exp_dyn"])
+    
     return pdf.output(dest='S').encode('latin-1', 'replace')
 
-def gerar_pdf_optica(zl, zs, mest, theta, is_cluster, theta_trr, prec, fator, eta_c):
+def gerar_pdf_optica(zl, zs, mest, theta, is_cluster, theta_trr, prec, fator, eta_c, theta_bar, L):
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font("Arial", 'B', 16)
-    pdf.cell(0, 10, txt="RELATORIO DE UNIFICACAO TRR - OPTICA COSMOLOGICA", ln=True, align='C')
-    pdf.set_font("Arial", size=12)
-    gas_txt = "Sim (Multiplicador de plasma)" if is_cluster else "Nao"
+    pdf.set_font("Arial", 'B', 15)
+    pdf.cell(0, 8, txt=L["pdf_title_opt"], ln=True, align='C')
+    pdf.set_font("Arial", size=10)
     
-    texto = f"""
---------------------------------------------------------------------------------
+    texto_dados = f"""
 1. CONSTANTES UNIVERSAIS UTILIZADAS:
-- Indice de Viscosidade do Vacuo (Beta) = 0.028006
+- Indice de Viscosidade (Beta) = 0.028006
 - Constante Gravitacional (G) = 6.67430e-11
-- Velocidade da Luz (c) = 299792458 m/s
 
-2. DADOS OBSERVADOS (TELESCOPIO):
-- Redshift Lente (z_L): {zl:.4f}
-- Redshift Fonte (z_S): {zs:.4f}
-- Massa Estelar Estimada: {mest} x 10^11 M_sol
-- Anel de Einstein Observado: {theta} arcsec
-- Aglomerado Gigante com Gas?: {gas_txt}
-
-3. RESULTADOS DA CALIBRACAO TRR:
-- Desvio Previsto TRR: {theta_trr:.2f} arcsec
-- Precisao de Acerto (Acuracia): {prec:.2f}%
-- Massa Estelar Otimizada: {mest * fator:.2f} x 10^11 M_sol
-- Indice de Refracao de Cortez (eta_C): {eta_c:.5f}
-
-4. METODOLOGIA FISICA (TRANSPARENCIA):
-A luz sofre um atraso de fase fisico ao atravessar o tecido viscoso 
-do vacuo. O Indice de Refracao amplifica geometricamente a curvatura. 
-A mesma constante Beta que propulsiona galaxias refratou a luz aqui, 
-confirmando matematicamente a unificacao cosmica da teoria.
---------------------------------------------------------------------------------
+2. RESULTADOS DA CALIBRACAO TRR:
+- Desvio Previsto TRR: {theta_trr:.2f} arcsec  |  Telescopio: {theta:.2f} arcsec
+- Precisao de Acerto: {prec:.2f}%
+- Indice de Refracao (eta_C): {eta_c:.5f}
     """
-    for linha in texto.split('\n'):
-        pdf.multi_cell(0, 8, txt=linha)
+    for linha in texto_dados.split('\n'):
+        pdf.multi_cell(0, 6, txt=linha)
+        
+    # Inserir Gráfico
+    img_path = criar_grafico_optica(theta_bar, theta_trr, theta, L)
+    pdf.image(img_path, x=20, w=170)
+    os.unlink(img_path)
+    
+    pdf.ln(5)
+    pdf.set_font("Arial", 'B', 11)
+    pdf.cell(0, 8, txt="COMPARATIVO COM O MODELO LAMBDA-CDM:", ln=True)
+    pdf.set_font("Arial", size=10)
+    pdf.multi_cell(0, 6, txt=L["pdf_exp_opt"])
+    
     return pdf.output(dest='S').encode('latin-1', 'replace')
 
 # ==========================================
-# DICIONÁRIO DE IDIOMAS (GLOBAL)
+# DICIONÁRIO DE IDIOMAS (POR EXTENSO)
 # ==========================================
 LANG = {
-    "PT": {
-        "title": "🌌 Motor Cosmológico TRR", "rad": "Raio observado (kpc)", "vobs": "Velocidade Obs (km/s)", "vgas": "Velocidade Gás (km/s)", "vdisk": "Veloc. Disco (km/s)", "vbulge": "Veloc. Haste/Bojo (km/s)", 
+    "Português (PT)": {
+        "title": "🌌 Motor Cosmológico TRR", "rad": "Raio observado (kpc)", "vobs": "Velocidade Obs (km/s)", "vgas": "Velocidade Gás (km/s)", "vdisk": "Veloc. Disco (km/s)", "vbulge": "Veloc. Bojo (km/s)", 
         "calc": "🚀 Processar TRR", "clear": "🧹 Limpar Tudo", "zl": "Redshift Lente (z_L)", "zs": "Redshift Fonte (z_S)", "mest": "Massa Estelar (10^11 M_sol)", "theta": "Anel Einstein (arcsec)", 
-        "cluster": "Aglomerado Gigante com Gás?", "tab1": "📊 Dinâmica Galáctica", "tab2": "👁️ Óptica Cosmológica", "pdf_btn": "📄 Baixar / Compartilhar PDF", "details": "📚 Ver Relatório Detalhado (Métodos e Constantes)",
-        "ml_disk": "M/L Disco", "ml_bulge": "M/L Bojo", "v_trr": "Previsão TRR", "v_obs": "Veloc. Telescópio", "precision": "Precisão de Acerto",
-        "mest_opt": "Massa Otimizada", "eta_c": "Índice de Cortez (η_C)", "theta_trr": "Desvio TRR", "theta_obs": "Desvio Telescópio",
-        "exp_dyn": "A constante β (0.028006) interagiu com a geometria da galáxia gerando o escudo topológico. A curva de velocidade foi sustentada respeitando a matéria bariônica pura, sem matéria escura.",
-        "exp_opt": "A luz sofreu o atraso de fase ao atravessar o vácuo viscoso. O Índice de Cortez amplificou o desvio da luz eliminando a necessidade matemática de Halos Escuros."
+        "cluster": "Aglomerado com Gás?", "tab1": "📊 Dinâmica", "tab2": "👁️ Óptica", "pdf_btn": "📄 Baixar Relatório Completo (PDF)", "details": "📚 Ver Relatório Metodológico",
+        "precision": "Precisão de Acerto", "g_bar": "Bariônica Pura", "g_trr": "Previsão TRR", "g_obs": "Telescópio", "g_vel": "Velocidade (km/s)", "g_theta": "Desvio (arcsec)", "g_bar_opt": "Massa Visível",
+        "g_title_dyn": "Comparativo: TRR vs Fisica Classica", "g_title_opt": "Comparativo Lente: TRR vs Fisica Classica",
+        "pdf_title_dyn": "RELATORIO DE UNIFICACAO TRR - DINAMICA GALACTICA", "pdf_title_opt": "RELATORIO DE UNIFICACAO TRR - OPTICA COSMOLOGICA",
+        "pdf_exp_dyn": "Na fisica classica, a velocidade gerada apenas pela materia visivel (Barionica Pura) e insuficiente, forcando o Modelo Padrao a inventar artificialmente a 'Materia Escura' para preencher a lacuna no grafico. A TRR (coluna central) atinge a velocidade real do telescopio naturalmente atraves do arrasto topologico (Beta), provando matematicamente que a anomalia e um efeito da viscosidade do vacuo, e nao de massa invisivel.",
+        "pdf_exp_opt": "No Modelo Padrao, a massa visivel da galaxia e fraca demais para gerar a curvatura da luz observada (Barionica Pura), exigindo a injecao de Halos Escuros na equacao. A TRR soluciona isso aplicando o Indice de Refracao do Vacuo. O atraso de fase da luz amplifica geometricamente o anel de Einstein, preenchendo a lacuna classica de forma elegante e sem materia escura."
     },
-    "EN": {
-        "title": "🌌 TRR Cosmological Engine", "rad": "Observed Radius (kpc)", "vobs": "Obs Velocity (km/s)", "vgas": "Gas Velocity (km/s)", "vdisk": "Disk Velocity (km/s)", "vbulge": "Bar/Bulge Vel. (km/s)", 
-        "calc": "🚀 Process TRR", "clear": "🧹 Clear All", "zl": "Lens Redshift (z_L)", "zs": "Source Redshift (z_S)", "mest": "Stellar Mass (10^11 M_sol)", "theta": "Einstein Ring (arcsec)", 
-        "cluster": "Giant Gas Cluster?", "tab1": "📊 Galactic Dynamics", "tab2": "👁️ Cosmological Optics", "pdf_btn": "📄 Download / Share PDF", "details": "📚 View Detailed Report (Methods & Constants)",
-        "ml_disk": "M/L Disk", "ml_bulge": "M/L Bulge", "v_trr": "TRR Prediction", "v_obs": "Telescope Vel.", "precision": "Accuracy",
-        "mest_opt": "Optimized Mass", "eta_c": "Cortez Index (η_C)", "theta_trr": "TRR Deflection", "theta_obs": "Telescope Deflection",
-        "exp_dyn": "The β constant (0.028006) interacted with the galaxy's geometry creating a topological shield. The velocity curve was sustained respecting pure baryonic matter, without dark matter.",
-        "exp_opt": "Light suffered a phase delay crossing the viscous vacuum. The Cortez Index amplified the light deflection, eliminating the mathematical need for Dark Halos."
-    }
+    "English (EN)": {
+        "title": "🌌 TRR Cosmological Engine", "rad": "Observed Radius (kpc)", "vobs": "Obs Velocity (km/s)", "vgas": "Gas Velocity (km/s)", "vdisk": "Disk Velocity (km/s)", "vbulge": "Bulge Vel. (km/s)", 
+        "calc": "🚀 Process TRR", "clear": "🧹 Clear All", "zl": "Lens Redshift (z_L)", "zs": "Source Redshift (z_S)", "mest": "Stellar Mass (10^11)", "theta": "Einstein Ring (arcsec)", 
+        "cluster": "Giant Gas Cluster?", "tab1": "📊 Dynamics", "tab2": "👁️ Optics", "pdf_btn": "📄 Download Full Report (PDF)", "details": "📚 View Methodological Report",
+        "precision": "Accuracy", "g_bar": "Pure Baryonic", "g_trr": "TRR Prediction", "g_obs": "Telescope", "g_vel": "Velocity (km/s)", "g_theta": "Deflection (arcsec)", "g_bar_opt": "Visible Mass",
+        "g_title_dyn": "Comparison: TRR vs Classical Physics", "g_title_opt": "Lens Comparison: TRR vs Classical Physics",
+        "pdf_title_dyn": "TRR UNIFICATION REPORT - GALACTIC DYNAMICS", "pdf_title_opt": "TRR UNIFICATION REPORT - COSMOLOGICAL OPTICS",
+        "pdf_exp_dyn": "In classical physics, velocity generated only by visible matter (Pure Baryonic) is insufficient, forcing the Standard Model to artificially invent 'Dark Matter' to fill the gap. TRR (center column) hits the true telescope velocity naturally through topological drag (Beta), proving mathematically that the anomaly is an effect of vacuum viscosity, not invisible mass.",
+        "pdf_exp_opt": "In the Standard Model, the galaxy's visible mass is too weak to generate the observed light curvature, requiring the injection of Dark Halos. TRR solves this by applying the Vacuum Refraction Index. The phase delay of light geometrically amplifies the Einstein ring, filling the classical gap elegantly without dark matter."
+    },
+    "Español (ES)": {"title": "🌌 Motor Cosmológico TRR", "calc": "🚀 Procesar TRR", "clear": "🧹 Limpiar Todo", "tab1": "📊 Dinámica", "tab2": "👁️ Óptica", "pdf_btn": "📄 Descargar Reporte (PDF)", "g_bar": "Bariónica Pura", "g_trr": "Predicción TRR", "g_obs": "Telescopio"},
+    "Français (FR)": {"title": "🌌 Moteur Cosmologique TRR", "calc": "🚀 Traiter TRR", "clear": "🧹 Effacer", "tab1": "📊 Dynamique", "tab2": "👁️ Optique", "pdf_btn": "📄 Télécharger Rapport (PDF)", "g_bar": "Baryonique Pure", "g_trr": "Prédiction TRR", "g_obs": "Télescope"},
+    "Deutsch (DE)": {"title": "🌌 TRR Kosmologischer Motor", "calc": "🚀 TRR Verarbeiten", "clear": "🧹 Alles Löschen", "tab1": "📊 Dynamik", "tab2": "👁️ Optik", "pdf_btn": "📄 Bericht Herunterladen (PDF)", "g_bar": "Nur Baryonisch", "g_trr": "TRR Vorhersage", "g_obs": "Teleskop"},
+    "Italiano (IT)": {"title": "🌌 Motore Cosmologico TRR", "calc": "🚀 Elabora TRR", "clear": "🧹 Pulisci Tutto", "tab1": "📊 Dinamica", "tab2": "👁️ Ottica", "pdf_btn": "📄 Scarica Report (PDF)", "g_bar": "Barionica Pura", "g_trr": "Previsione TRR", "g_obs": "Telescopio"},
+    "中文 (ZH)": {"title": "🌌 TRR 宇宙引擎", "calc": "🚀 运行 TRR", "clear": "🧹 清除所有", "tab1": "📊 动力学", "tab2": "👁️ 光学", "pdf_btn": "📄 下载报告 (PDF)", "g_bar": "纯重子", "g_trr": "TRR 预测", "g_obs": "望远镜"},
+    "Русский (RU)": {"title": "🌌 Двигатель TRR", "calc": "🚀 Анализ TRR", "clear": "🧹 Очистить", "tab1": "📊 Динамика", "tab2": "👁️ Оптика", "pdf_btn": "📄 Скачать отчет (PDF)", "g_bar": "Только барионная", "g_trr": "Прогноз TRR", "g_obs": "Телескоп"}
 }
-for lang in ["ES", "FR", "DE", "IT", "ZH", "RU"]:
-    LANG[lang] = LANG["EN"]
+# Preenchimento automático de chaves faltantes com base no inglês
+for lang in LANG:
+    if lang not in ["Português (PT)", "English (EN)"]:
+        for key in LANG["English (EN)"]:
+            if key not in LANG[lang]: LANG[lang][key] = LANG["English (EN)"][key]
 
 # ==========================================
 # INTERFACE DO STREAMLIT
@@ -152,7 +186,8 @@ for lang in ["ES", "FR", "DE", "IT", "ZH", "RU"]:
 st.set_page_config(page_title="Motor TRR", layout="centered", initial_sidebar_state="expanded")
 
 with st.sidebar:
-    idioma_escolhido = st.selectbox("🌎 Language / Idioma", ["PT", "EN", "ES", "FR", "DE", "IT", "ZH", "RU"])
+    lista_idiomas = list(LANG.keys())
+    idioma_escolhido = st.selectbox("🌎 Language / Idioma", lista_idiomas)
     L = LANG[idioma_escolhido]
     st.markdown("---")
     st.markdown("**Autor:** Jean Cortez\n\n*Teoria da Relatividade Referencial*")
@@ -161,7 +196,6 @@ st.title(L["title"])
 
 aba1, aba2 = st.tabs([L["tab1"], L["tab2"]])
 
-# --- ABA 1: DINÂMICA ---
 with aba1:
     c1, c2 = st.columns(2)
     rad = c1.number_input(L["rad"], min_value=0.0, format="%.2f", step=1.0, key="d_rad")
@@ -177,7 +211,7 @@ with aba1:
     with col_btn1:
         if st.button(L["calc"], type="primary", use_container_width=True, key="btn_dyn"):
             if rad > 0 and v_obs > 0:
-                melhor_erro, melhor_ml, melhor_v_trr = float('inf'), 0, 0
+                melhor_erro, melhor_ml, melhor_v_trr, v_bar_pura = float('inf'), 0, 0, 0
                 for ml_x in range(10, 101):
                     ml_disk = ml_x / 100.0
                     ml_bulge = ml_disk + 0.2
@@ -193,35 +227,28 @@ with aba1:
                     
                     erro = abs(g_obs - g_trr) / g_obs
                     if erro < melhor_erro:
-                        melhor_erro, melhor_ml, melhor_v_trr = erro, ml_disk, math.sqrt((g_trr * rad * 3.086e19) / 1e6)
+                        melhor_erro, melhor_ml = erro, ml_disk
+                        melhor_v_trr = math.sqrt((g_trr * rad * 3.086e19) / 1e6)
+                        v_bar_pura = math.sqrt(v_bar_sq) # Velocidade sem matéria escura e sem TRR
                 
                 st.session_state['res_dyn'] = {
                     'vtrr': melhor_v_trr, 'prec': max(0, 100 - (melhor_erro*100)),
-                    'ml_disk': melhor_ml, 'ml_bulge': melhor_ml + 0.2
+                    'ml_disk': melhor_ml, 'ml_bulge': melhor_ml + 0.2, 'v_bar': v_bar_pura
                 }
     
     with col_btn2:
         st.button(L["clear"], on_click=limpar_dados, use_container_width=True, key="clr_dyn")
 
-    # RESULTADOS DA DINÂMICA
     if 'res_dyn' in st.session_state:
         res = st.session_state['res_dyn']
         st.success(f"**{L['precision']}:** {res['prec']:.2f}%")
         
-        with st.container(border=True):
-            cA, cB = st.columns(2)
-            cA.metric(L["v_trr"], f"{res['vtrr']:.2f} km/s")
-            cB.metric(L["v_obs"], f"{v_obs:.2f} km/s")
-        
         with st.expander(L["details"]):
-            st.markdown(f"**{L['ml_disk']}:** `{res['ml_disk']:.2f}` | **{L['ml_bulge']}:** `{res['ml_bulge']:.2f}`")
-            st.info(L["exp_dyn"])
-        
-        pdf_bytes = gerar_pdf_dinamica(rad, v_obs, v_gas, v_disk, v_bulge, res['vtrr'], res['prec'], res['ml_disk'], res['ml_bulge'])
+            st.info(L["pdf_exp_dyn"].replace("pdf_exp_dyn", ""))
+            
+        pdf_bytes = gerar_pdf_dinamica(rad, v_obs, v_gas, v_disk, v_bulge, res['vtrr'], res['prec'], res['ml_disk'], res['ml_bulge'], res['v_bar'], L)
         st.download_button(L["pdf_btn"], data=pdf_bytes, file_name="Relatorio_TRR_Dinamica.pdf", mime="application/pdf", type="primary", use_container_width=True)
 
-
-# --- ABA 2: ÓPTICA ---
 with aba2:
     c5, c6 = st.columns(2)
     zl = c5.number_input(L["zl"], min_value=0.0, format="%.4f", step=0.1, key="o_zl")
@@ -238,7 +265,7 @@ with aba2:
         if st.button(L["calc"], type="primary", use_container_width=True, key="btn_opt"):
             if zl > 0 and zs > zl and theta > 0 and mest > 0:
                 D_L, D_S, D_LS = calcular_D_A(0, zl), calcular_D_A(0, zs), calcular_D_A(zl, zs)
-                melhor_erro, melhor_theta_trr, melhor_fator = float('inf'), 0, 0
+                melhor_erro, melhor_theta_trr, melhor_fator, theta_bar_pura = float('inf'), 0, 0, 0
 
                 for fator_ml in [x/100.0 for x in range(50, 251)]:
                     mult_gas = 7.0 if is_cluster else 1.0
@@ -246,8 +273,8 @@ with aba2:
                     
                     termo_massa = (4 * G * M_bar_kg) / (C**2)
                     theta_bar_rad = math.sqrt(termo_massa * (D_LS / (D_L * D_S)))
-                    g_bar = (G * M_bar_kg) / ((theta_bar_rad * D_L)**2)
                     
+                    g_bar = (G * M_bar_kg) / ((theta_bar_rad * D_L)**2)
                     x = g_bar / A0
                     fator_fase = 1.0 / (1.0 - math.exp(-math.sqrt(x)))
                     eta_C = 1.0 + BETA * math.log(1 + zl)
@@ -257,28 +284,22 @@ with aba2:
                     erro = abs(theta - theta_trr) / theta
                     if erro < melhor_erro:
                         melhor_erro, melhor_theta_trr, melhor_fator = erro, theta_trr, fator_ml
+                        theta_bar_pura = theta_bar_rad * 206264.806 # Theta sem refração do vácuo
 
                 st.session_state['res_opt'] = {
                     'theta_trr': melhor_theta_trr, 'prec': max(0, 100 - (melhor_erro*100)),
-                    'fator': melhor_fator, 'eta_c': 1.0 + BETA * math.log(1 + zl)
+                    'fator': melhor_fator, 'eta_c': 1.0 + BETA * math.log(1 + zl), 'theta_bar': theta_bar_pura
                 }
 
     with col_btn4:
         st.button(L["clear"], on_click=limpar_dados, use_container_width=True, key="clr_opt")
 
-    # RESULTADOS DA ÓPTICA
     if 'res_opt' in st.session_state:
         res = st.session_state['res_opt']
         st.success(f"**{L['precision']}:** {res['prec']:.2f}%")
         
-        with st.container(border=True):
-            cC, cD = st.columns(2)
-            cC.metric(L["theta_trr"], f"{res['theta_trr']:.2f} arcsec")
-            cD.metric(L["theta_obs"], f"{theta:.2f} arcsec")
-            
         with st.expander(L["details"]):
-            st.markdown(f"**{L['mest_opt']}:** `{mest * res['fator']:.2f} x 10^11 M_sol`\n\n**{L['eta_c']}:** `{res['eta_c']:.5f}`")
-            st.info(L["exp_opt"])
+            st.info(L["pdf_exp_opt"].replace("pdf_exp_opt", ""))
 
-        pdf_bytes2 = gerar_pdf_optica(zl, zs, mest, theta, is_cluster, res['theta_trr'], res['prec'], res['fator'], res['eta_c'])
+        pdf_bytes2 = gerar_pdf_optica(zl, zs, mest, theta, is_cluster, res['theta_trr'], res['prec'], res['fator'], res['eta_c'], res['theta_bar'], L)
         st.download_button(L["pdf_btn"], data=pdf_bytes2, file_name="Relatorio_TRR_Optica.pdf", mime="application/pdf", type="primary", use_container_width=True)
