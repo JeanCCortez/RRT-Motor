@@ -189,7 +189,7 @@ st.set_page_config(page_title="Motor TRR", layout="centered")
 if 'idioma_selecionado' not in st.session_state: st.session_state['idioma_selecionado'] = None
 
 if st.session_state['idioma_selecionado'] is None:
-    st.markdown("<h2 style='text-align: center;'>🌍 TRR Cosmological Engine</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>🌍 RRT Cosmological Engine</h2>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: gray;'>Select your language / Selecione o seu idioma</p>", unsafe_allow_html=True)
     idioma_opcoes = {"Português": "PT", "English": "EN", "Español": "ES", "Français": "FR", "Deutsch": "DE", "Italiano": "IT", "中文 (Chinese)": "ZH", "Русский (Russian)": "RU"}
     escolha = st.selectbox("", list(idioma_opcoes.keys()))
@@ -371,3 +371,4 @@ else:
             with st.expander(L["details"]): st.info(L["rep_str_text"].format(loc_str=loc_str_ui, **res))
             # Key p4
             st.download_button(L["pdf_btn"], data=gerar_pdf("str", res, L), file_name="Report_Streams.pdf", mime="application/pdf", use_container_width=True, key="p4")
+
