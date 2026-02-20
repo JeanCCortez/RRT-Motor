@@ -24,7 +24,7 @@ def calcular_D_A(z1, z2):
     return ((299792.458 / 70.0) * integral / (1 + z2)) * 3.086e22
 
 # ==========================================
-# DICIONÁRIO ABSOLUTO (SEM BENGALAS MATEMÁTICAS)
+# DICIONÁRIO ABSOLUTO (SEM BENGALAS E SEM SOBREPOSIÇÕES)
 # ==========================================
 LANG = {
     "PT": {
@@ -48,7 +48,7 @@ LANG = {
         "title": "🌌 TRR Cosmological Engine", "author_prefix": "Author", "theory_name": "Referential Relativity Theory",
         "tab1": "📊 Galactic Dynamics", "tab2": "👁️ Cosmological Optics", "tab3": "🔭 Redshift Prediction", "tab4": "☄️ Stellar Streams",
         "rad": "Obs. Radius (kpc)", "vobs": "Telescope Vel. (km/s)", "vgas": "Gas Vel. (km/s)", "vdisk": "Disk Vel. (km/s)", "vbulge": "Bulge Vel. (km/s)",
-        "zl": "Lens Redshift (z_L)", "zs": "Source Redshift (z_S)", "mest": "Absolute Photometric Mass (10^11 M_sol)", "theta": "Einstein Ring (arcsec)", "cluster": "Giant Cluster?",
+        "zl": "Lens Redshift (z_L)", "zs": "Source Redshift (z_S)", "mest": "Absolute Photometric Mass (10^11)", "theta": "Einstein Ring (arcsec)", "cluster": "Giant Cluster?",
         "r_peri": "Stream Pericenter (kpc)", "r_apo": "Stream Apocenter (kpc)", 
         "calc": "🚀 Process TRR Audit", "clear": "🧹 Clear All", 
         "pdf_btn": "📄 Download Audit Report (PDF)", "details": "📚 View Technical Report",
@@ -58,10 +58,104 @@ LANG = {
         "rep_opt_text": "DIAGNOSIS: Visible mass deflects {tbar} arcsec. Telescope = {tobs} arcsec. TRR applies Time Refraction (eta_C = {etac}). Phase delay amplifies to {ttrr} arcsec. Accuracy: {prec}%.",
         "rep_red_text": "COSMOLOGICAL PREDICTION: Using exact photometric mass, without ad hoc M/L adjustments, TRR isolates vacuum refraction and predicts Source Redshift (z_S) at {zs_pred:.4f}. Algorithm Accuracy: {prec}%.",
         "rep_str_text": "PREDICTIVE FLUID MECHANICS: Classical physics will claim dark matter sub-halos exist here. TRR tracked the orbit and detected critical Viscous Shear exactly in the zone: {loc_str}. Gaps are purely vacuum tension."
+    },
+    "ES": {
+        "code": "ES", "btn_enter": "Entrar al Motor TRR", "welcome": "Seleccione su idioma",
+        "title": "🌌 Motor Cosmológico TRR", "author_prefix": "Autor", "theory_name": "Teoría de la Relatividad Referencial",
+        "tab1": "📊 Dinámica Galáctica", "tab2": "👁️ Óptica Cosmológica", "tab3": "🔭 Predicción de Redshift", "tab4": "☄️ Corrientes Estelares",
+        "rad": "Radio observado (kpc)", "vobs": "Vel. Telescopio (km/s)", "vgas": "Velocidad Gas (km/s)", "vdisk": "Vel. Disco (km/s)", "vbulge": "Vel. Bulbo (km/s)",
+        "zl": "Redshift Lente (z_L)", "zs": "Redshift Fuente (z_S)", "mest": "Masa Fotométrica Absoluta (10^11)", "theta": "Anillo Einstein (arcsec)", "cluster": "¿Cúmulo Gigante?",
+        "r_peri": "Pericentro Corriente (kpc)", "r_apo": "Apocentro Corriente (kpc)", 
+        "calc": "🚀 Procesar Auditoría TRR", "clear": "🧹 Limpiar Todo", 
+        "pdf_btn": "📄 Descargar Reporte de Auditoría (PDF)", "details": "📚 Ver Dictamen Técnico",
+        "precision": "Precisión", "g_bar": "Física Clásica", "g_trr": "Predicción TRR", "g_obs": "Telescopio",
+        "pdf_title_dyn": "AUDITORIA CIENTIFICA - DINAMICA", "pdf_title_opt": "AUDITORIA CIENTIFICA - OPTICA", "pdf_title_red": "AUDITORIA CIENTIFICA - REDSHIFT", "pdf_title_str": "AUDITORIA CIENTIFICA - CORRIENTES",
+        "rep_dyn_text": "DIAGNOSTICO: La masa barionica genera solo {vbar} km/s. Telescopio = {vobs} km/s. El arrastre TRR eleva a {vtrr} km/s. Precision: {prec}%.",
+        "rep_opt_text": "DIAGNOSTICO: TRR aplica Refraccion Temporal (eta_C = {etac}). Desvio amplificado a {ttrr} arcsec. Precision: {prec}%.",
+        "rep_red_text": "PREDICCION COSMOLOGICA: Usando la masa exacta, TRR aísla la refraccion y predice el Redshift (z_S) en {zs_pred:.4f}. Precision: {prec}%.",
+        "rep_str_text": "MECANICA FLUIDA PREDITIVA: TRR rastreo la orbita y detecto Cizallamiento Viscoso critico exactamente en la zona: {loc_str}. Los gaps son vacio."
+    },
+    "FR": {
+        "code": "FR", "btn_enter": "Entrer dans TRR", "welcome": "Sélectionnez votre langue",
+        "title": "🌌 Moteur Cosmologique TRR", "author_prefix": "Auteur", "theory_name": "Théorie de la Relativité Référentielle",
+        "tab1": "📊 Dynamique Galactique", "tab2": "👁️ Optique Cosmologique", "tab3": "🔭 Prédiction Redshift", "tab4": "☄️ Courants Stellaires",
+        "rad": "Rayon (kpc)", "vobs": "Vit. Télescope (km/s)", "vgas": "Vit. Gaz (km/s)", "vdisk": "Vit. Disque (km/s)", "vbulge": "Vit. Bulbe (km/s)",
+        "zl": "Redshift Lentille (z_L)", "zs": "Redshift Source (z_S)", "mest": "Masse Photométrique (10^11)", "theta": "Anneau Einstein (arcsec)", "cluster": "Amas Géant?",
+        "r_peri": "Péricentre (kpc)", "r_apo": "Apocentre (kpc)", 
+        "calc": "🚀 Traiter l'Audit TRR", "clear": "🧹 Tout Effacer", 
+        "pdf_btn": "📄 Télécharger Rapport (PDF)", "details": "📚 Voir l'Avis Technique",
+        "precision": "Précision", "g_bar": "Physique Classique", "g_trr": "Prédiction TRR", "g_obs": "Télescope",
+        "pdf_title_dyn": "AUDIT SCIENTIFIQUE - DYNAMIQUE", "pdf_title_opt": "AUDIT SCIENTIFIQUE - OPTIQUE", "pdf_title_red": "AUDIT SCIENTIFIQUE - REDSHIFT", "pdf_title_str": "AUDIT SCIENTIFIQUE - COURANTS",
+        "rep_dyn_text": "DIAGNOSTIC: La masse baryonique génère {vbar} km/s. TRR (Beta) l'élève à {vtrr} km/s. Précision: {prec}%.",
+        "rep_opt_text": "DIAGNOSTIC: TRR applique Réfraction Temporelle (eta_C = {etac}). Déviation amplifiée à {ttrr} arcsec. Précision: {prec}%.",
+        "rep_red_text": "PRÉDICTION: En utilisant la masse exacte, TRR prédit le Redshift Source (z_S) à {zs_pred:.4f}. Précision: {prec}%.",
+        "rep_str_text": "MÉCANIQUE FLUIDE: TRR a détecté un Cisaillement Visqueux critique dans la zone: {loc_str}. Les halos noirs sont obsolètes."
+    },
+    "DE": {
+        "code": "DE", "btn_enter": "TRR betreten", "welcome": "Wählen Sie Ihre Sprache",
+        "title": "🌌 TRR Kosmologischer Motor", "author_prefix": "Autor", "theory_name": "Referenzielle Relativitätstheorie",
+        "tab1": "📊 Galaktische Dynamik", "tab2": "👁️ Kosmologische Optik", "tab3": "🔭 Redshift-Vorhersage", "tab4": "☄️ Sternströme",
+        "rad": "Radius (kpc)", "vobs": "Teleskopgeschw. (km/s)", "vgas": "Gasgeschw. (km/s)", "vdisk": "Scheibengeschw.", "vbulge": "Balkengeschw.",
+        "zl": "Linsen-Redshift", "zs": "Quellen-Redshift", "mest": "Absolute Masse (10^11)", "theta": "Einsteinring (arcsec)", "cluster": "Galaxienhaufen?",
+        "r_peri": "Perizentrum (kpc)", "r_apo": "Apozentrum (kpc)", 
+        "calc": "🚀 TRR-Audit durchführen", "clear": "🧹 Alles löschen", 
+        "pdf_btn": "📄 Audit-Bericht (PDF)", "details": "📚 Technisches Gutachten",
+        "precision": "Genauigkeit", "g_bar": "Klassische Physik", "g_trr": "TRR Vorhersage", "g_obs": "Teleskop",
+        "pdf_title_dyn": "WISSENSCHAFTLICHES AUDIT - DYNAMIK", "pdf_title_opt": "WISSENSCHAFTLICHES AUDIT - OPTIK", "pdf_title_red": "WISSENSCHAFTLICHES AUDIT - REDSHIFT", "pdf_title_str": "WISSENSCHAFTLICHES AUDIT - STROEME",
+        "rep_dyn_text": "DIAGNOSE: Masse erzeugt nur {vbar} km/s. TRR-Widerstand erhoht auf {vtrr} km/s. Genauigkeit: {prec}%.",
+        "rep_opt_text": "DIAGNOSE: TRR wendet Zeitbrechung an (eta_C = {etac}). Ablenkung auf {ttrr} arcsec verstarkt. Genauigkeit: {prec}%.",
+        "rep_red_text": "VORHERSAGE: Ohne ad-hoc-Anpassungen prognostiziert TRR das Quellen-Redshift (z_S) auf {zs_pred:.4f}. Genauigkeit: {prec}%.",
+        "rep_str_text": "FLUIDMECHANIK: TRR verfolgte die Umlaufbahn und erkannte kritische viskose Scherung in der Zone: {loc_str}. Gaps sind Vakuumspannung."
+    },
+    "IT": {
+        "code": "IT", "btn_enter": "Entra nel TRR", "welcome": "Seleziona la tua lingua",
+        "title": "🌌 Motore Cosmologico TRR", "author_prefix": "Autore", "theory_name": "Teoria della Relatività Referenziale",
+        "tab1": "📊 Dinamica Galattica", "tab2": "👁️ Ottica Cosmologica", "tab3": "🔭 Previsione Redshift", "tab4": "☄️ Correnti Stellari",
+        "rad": "Raggio (kpc)", "vobs": "Vel. Telescopio (km/s)", "vgas": "Vel. Gas (km/s)", "vdisk": "Vel. Disco (km/s)", "vbulge": "Vel. Bulbo (km/s)",
+        "zl": "Redshift Lente", "zs": "Redshift Sorgente", "mest": "Massa Assoluta (10^11)", "theta": "Anello Einstein (arcsec)", "cluster": "Ammasso Gigante?",
+        "r_peri": "Pericentro (kpc)", "r_apo": "Apocentro (kpc)", 
+        "calc": "🚀 Elabora Audit TRR", "clear": "🧹 Pulisci Tutto", 
+        "pdf_btn": "📄 Scarica Report (PDF)", "details": "📚 Parere Tecnico",
+        "precision": "Precisione", "g_bar": "Fisica Classica", "g_trr": "Previsione TRR", "g_obs": "Telescopio",
+        "pdf_title_dyn": "AUDIT SCIENTIFICO - DINAMICA", "pdf_title_opt": "AUDIT SCIENTIFICO - OTTICA", "pdf_title_red": "AUDIT SCIENTIFICO - REDSHIFT", "pdf_title_str": "AUDIT SCIENTIFICO - CORRENTI",
+        "rep_dyn_text": "DIAGNOSI: La massa genera solo {vbar} km/s. TRR eleva a {vtrr} km/s. Precisione: {prec}%.",
+        "rep_opt_text": "DIAGNOSI: Rifrazione Temporale (eta_C = {etac}). Deviazione amplificata a {ttrr} arcsec. Precisione: {prec}%.",
+        "rep_red_text": "PREVISIONE: Usando la massa esatta, TRR prevede un Redshift Sorgente (z_S) di {zs_pred:.4f}. Precisione: {prec}%.",
+        "rep_str_text": "MECCANICA FLUIDA: TRR ha rilevato Taglio Viscoso critico esattamente nella zona: {loc_str}. Aloni oscuri obsoleti."
+    },
+    "ZH": {
+        "code": "ZH", "btn_enter": "进入 TRR 引擎", "welcome": "请选择您的语言",
+        "title": "🌌 TRR 宇宙引擎", "author_prefix": "作者", "theory_name": "参照相对论",
+        "tab1": "📊 星系动力学", "tab2": "👁️ 宇宙光学", "tab3": "🔭 红移预测", "tab4": "☄️ 恒星流",
+        "rad": "观测半径 (kpc)", "vobs": "望远镜速度 (km/s)", "vgas": "气体速度", "vdisk": "星盘速度", "vbulge": "核球速度",
+        "zl": "透镜红移", "zs": "光源红移", "mest": "绝对光度质量 (10^11)", "theta": "爱因斯坦环", "cluster": "巨型星系团？",
+        "r_peri": "流近星点 (kpc)", "r_apo": "流远星点 (kpc)", 
+        "calc": "🚀 运行 TRR 审计", "clear": "🧹 清除所有", 
+        "pdf_btn": "📄 下载报告 (PDF - EN)", "details": "📚 查看技术意见",
+        "precision": "精度", "g_bar": "经典物理", "g_trr": "TRR 预测", "g_obs": "望远镜",
+        "pdf_title_dyn": "SCIENTIFIC AUDIT - DYNAMICS", "pdf_title_opt": "SCIENTIFIC AUDIT - OPTICS", "pdf_title_red": "SCIENTIFIC AUDIT - REDSHIFT", "pdf_title_str": "SCIENTIFIC AUDIT - STREAMS",
+        "rep_dyn_text": "诊断: TRR 阻力将速度提高到 {vtrr} km/s. 精度: {prec}%.",
+        "rep_opt_text": "诊断: TRR (eta_C = {etac}) 放大偏转至 {ttrr} arcsec. 精度: {prec}%.",
+        "rep_red_text": "预测: TRR 隔离真空折射，预测光源红移 (z_S) 为 {zs_pred:.4f}. 精度: {prec}%.",
+        "rep_str_text": "预测流体力学: TRR 在区域 {loc_str} 检测到关键粘性剪切. 缝隙纯粹是真空张力."
+    },
+    "RU": {
+        "code": "RU", "btn_enter": "Войти в TRR", "welcome": "Выберите свой язык",
+        "title": "🌌 Двигатель TRR", "author_prefix": "Автор", "theory_name": "Теория Референциальной Относительности",
+        "tab1": "📊 Динамика", "tab2": "👁️ Оптика", "tab3": "🔭 Прогноз Redshift", "tab4": "☄️ Звездные потоки",
+        "rad": "Радиус (кпк)", "vobs": "Скор. телескопа", "vgas": "Скор. газа", "vdisk": "Скор. диска", "vbulge": "Скор. бара",
+        "zl": "Redshift линзы", "zs": "Redshift ист.", "mest": "Абсолютная масса (10^11)", "theta": "Кольцо Эйнштейна", "cluster": "Скопление?",
+        "r_peri": "Перицентр (кпк)", "r_apo": "Апоцентр (кпк)", 
+        "calc": "🚀 Анализ TRR", "clear": "🧹 Очистить всё", 
+        "pdf_btn": "📄 Скачать отчет (PDF - EN)", "details": "📚 Техническое заключение",
+        "precision": "Точность", "g_bar": "Классика", "g_trr": "Прогноз TRR", "g_obs": "Телескоп",
+        "pdf_title_dyn": "SCIENTIFIC AUDIT - DYNAMICS", "pdf_title_opt": "SCIENTIFIC AUDIT - OPTICS", "pdf_title_red": "SCIENTIFIC AUDIT - REDSHIFT", "pdf_title_str": "SCIENTIFIC AUDIT - STREAMS",
+        "rep_dyn_text": "ДИАГНОЗ: Сопротивление TRR увеличивает скорость до {vtrr} км/с. Точность: {prec}%.",
+        "rep_opt_text": "ДИАГНОЗ: TRR (eta_C = {etac}) усиливает отклонение до {ttrr} arcsec. Точность: {prec}%.",
+        "rep_red_text": "ПРОГНОЗ: TRR прогнозирует Redshift источника (z_S) {zs_pred:.4f}. Точность: {prec}%.",
+        "rep_str_text": "ГИДРОДИНАМИКА: TRR обнаружила критический сдвиг вакуума в зоне: {loc_str}. Разрывы - это вакуумное натяжение."
     }
 }
-for lang in ["ES", "FR", "DE", "IT", "ZH", "RU"]:
-    LANG[lang] = LANG["EN"]
 
 # ==========================================
 # MOTORES GRÁFICOS
@@ -252,9 +346,9 @@ else:
             with st.expander(L["details"]): st.info(L["rep_opt_text"].format(**res))
             st.download_button(L["pdf_btn"], data=gerar_pdf("opt", res, L), file_name="Auditoria_Optica.pdf", mime="application/pdf", use_container_width=True)
 
-    # --- ABA 3: PREVISÃO DE REDSHIFT (RIGOR ABSOLUTO) ---
+    # --- ABA 3: PREVISÃO DE REDSHIFT (SEM BENGALAS) ---
     with aba3:
-        st.info("💡 Cálculo Matemático Reverso: Encontrará a distância (z_S) usando estritamente a Massa Fotométrica informada, sem M/L fictício.")
+        st.info("💡 A TRR prevê a distância temporal (z_S) usando estritamente a Massa Fotométrica informada.")
         c9, c10 = st.columns(2)
         r_zl = c9.number_input(L["zl"], min_value=0.0, format="%.4f", step=0.1, key="r_zl")
         r_mest = c10.number_input(L["mest"], min_value=0.0, format="%.2f", step=1.0, key="r_mest")
@@ -265,7 +359,7 @@ else:
         if colE.button(L["calc"], type="primary", use_container_width=True, key="b3"):
             if r_zl > 0 and r_theta > 0 and r_mest > 0:
                 D_L = calcular_D_A(0, r_zl)
-                # RIGOR: Usa a massa exata digitada pelo usuário. Sem loops de ajuste artificial.
+                # Utiliza M/L=1.0 obrigatório. A massa digitada já é a massa assumida.
                 M_bar_kg = (r_mest * (7.0 if r_cluster else 1.0)) * 1e11 * M_SOL 
                 melhor_erro, zs_pred = float('inf'), 0
                 
@@ -282,13 +376,13 @@ else:
         colF.button(L["clear"], on_click=limpar_dados, use_container_width=True, key="c3")
         if 'res_red' in st.session_state:
             res = st.session_state['res_red']
-            st.success(f"**{L['precision']}:** {res['prec']:.2f}% | **Redshift z_S Previsto:** {res['zs_pred']:.4f}")
+            st.success(f"**{L['precision']}:** {res['prec']:.2f}% | **z_S:** {res['zs_pred']:.4f}")
             with st.expander(L["details"]): st.info(L["rep_red_text"].format(**res))
             st.download_button(L["pdf_btn"], data=gerar_pdf("red", res, L), file_name="Auditoria_Redshift.pdf", mime="application/pdf", use_container_width=True)
 
-    # --- ABA 4: CORRENTES ESTELARES (RASTREAMENTO DE HALOS) ---
+    # --- ABA 4: CORRENTES ESTELARES (COORDENADAS DE GAPS) ---
     with aba4:
-        st.info("💡 A TRR mapeará a órbita para encontrar Gaps e informará as coordenadas exatas onde o Modelo Padrão irá assumir falsos Sub-halos.")
+        st.info("💡 A TRR mapeia o Cisalhamento Viscoso e entrega a coordenada exata da ruptura.")
         c11, c12 = st.columns(2)
         s_peri = c11.number_input(L["r_peri"], min_value=0.0, format="%.2f", step=1.0, key="s_peri")
         s_apo = c12.number_input(L["r_apo"], min_value=0.0, format="%.2f", step=1.0, key="s_apo")
@@ -306,17 +400,10 @@ else:
                 cisal_norm = cisalhamento / np.max(cisalhamento)
                 limite_critico = 0.75
                 
-                # Rastreador exato de coordenadas de ruptura (Onde a Matéria Escura é "inventada")
                 zonas_ruptura = raios_kpc[cisal_norm >= limite_critico]
-                if len(zonas_ruptura) > 0:
-                    loc_str = f"Entre {zonas_ruptura[0]:.1f} kpc e {zonas_ruptura[-1]:.1f} kpc"
-                else:
-                    loc_str = "Sem ruptura crítica nesta órbita"
+                loc_str = f"[{zonas_ruptura[0]:.1f} kpc - {zonas_ruptura[-1]:.1f} kpc]" if len(zonas_ruptura) > 0 else "Nenhuma ruptura crítica."
                     
-                st.session_state['res_str'] = {
-                    'raios': raios_kpc, 'arrasto': arrasto, 'cisal': cisal_norm, 'limite': limite_critico, 
-                    'loc_str': loc_str
-                }
+                st.session_state['res_str'] = {'raios': raios_kpc, 'arrasto': arrasto, 'cisal': cisal_norm, 'limite': limite_critico, 'loc_str': loc_str}
         colH.button(L["clear"], on_click=limpar_dados, use_container_width=True, key="c4")
         if 'res_str' in st.session_state:
             res = st.session_state['res_str']
