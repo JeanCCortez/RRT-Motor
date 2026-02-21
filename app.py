@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from fpdf import FPDF
 
 # ==========================================
-# CONSTANTES DA TEORIA
+# CONSTANTES DA TEORIA TRR
 # ==========================================
 BETA = 0.028006
 A0 = 1.2001e-10
@@ -24,7 +24,7 @@ def calcular_D_A(z1, z2):
     return ((299792.458 / 70.0) * integral / (1 + z2)) * 3.086e22
 
 # ==========================================
-# DICIONÁRIO ABSOLUTO (SIGLAS LOCALIZADAS)
+# DICIONÁRIO ABSOLUTO (SEMÂNTICA CORRIGIDA)
 # ==========================================
 LANG = {
     "PT": {
@@ -36,16 +36,16 @@ LANG = {
         "r_peri": "Pericentro da Corrente (kpc)", "r_apo": "Apocentro da Corrente (kpc)", 
         "calc": "🚀 Processar Auditoria TRR", "clear": "🧹 Limpar Tudo", 
         "pdf_btn": "📄 Baixar Relatório de Auditoria (PDF)", "details": "📚 Ver Parecer Técnico",
-        "precision": "Precisão", "g_bar": "Física Clássica", "g_trr": "Previsão TRR", "g_obs": "Telescópio",
+        "precision": "Precisão Empírica", "precision_red": "Convergência Matemática", "g_bar": "Física Clássica", "g_trr": "Previsão TRR", "g_obs": "Telescópio",
         "info_red": "💡 A TRR iterará a matriz gravitacional para prever a distância da galáxia fonte (z_S).",
         "info_str": "💡 A TRR mapeia a tensão do vácuo e revela a coordenada do falso sub-halo.",
         "pred_zs": "Redshift z_S Previsto", "loc_gap": "📌 Falso Sub-halo nas coordenadas", "no_gap": "Nenhuma ruptura crítica",
         "pdf_h1": "TEORIA DA RELATIVIDADE REFERENCIAL (TRR)", "pdf_h2": "Relatorio de Auditoria Automatizada", "pdf_footer": "Documento gerado pelo Motor Cosmologico TRR.",
         "pdf_title_dyn": "AUDITORIA CIENTIFICA - DINAMICA", "pdf_title_opt": "AUDITORIA CIENTIFICA - OPTICA", "pdf_title_red": "AUDITORIA CIENTIFICA - REDSHIFT", "pdf_title_str": "AUDITORIA CIENTIFICA - CORRENTES",
-        "rep_dyn_text": "LAUDO TÉCNICO:\n1. A massa bariônica pura gera apenas {vbar:.2f} km/s, deixando um abismo em relação aos {vobs:.2f} km/s reais.\n2. A TRR calcula o atrito topológico proporcional à circunferência da órbita. Aplicando a constante Beta (0.028006), o arrasto fluídico eleva a velocidade para {vtrr:.2f} km/s.\nRESULTADO: Precisão de {prec:.2f}% atingida sem uso de Matéria Escura.",
-        "rep_opt_text": "LAUDO TÉCNICO:\nA massa visível desvia a luz em apenas {tbar:.2f} arcsec. Sem matéria invisível, a TRR aplica a Refração Temporal do Vácuo (eta_C = {etac:.5f}). O atraso de fase amplia o anel gravitacional para {ttrr:.2f} arcsec, batendo a observação do telescópio. Precisão: {prec:.2f}%.",
-        "rep_red_text": "LAUDO PREDITIVO:\n1. DESAFIO: A massa de lente informada gera uma curvatura clássica irrisória. O Modelo Padrão exigiria halos massivos.\n2. CONVERGÊNCIA TRR: Varrendo o tecido cósmico com base na refração da constante Beta, o algoritmo prediz que a galáxia fonte está posicionada em z_S = {zs_pred:.4f}.\nRESULTADO: Precisão de calibração cruzada de {prec:.2f}%.",
-        "rep_str_text": "LAUDO DE HIDRODINÂMICA:\n1. A astrofísica clássica afirma que os 'gaps' da corrente estelar são colisões com sub-halos invisíveis.\n2. A TRR rastreou a órbita medindo as forças de maré. O Cisalhamento Viscoso atingiu o limite crítico na zona exata de {loc_str}. O gap é atrito com o espaço."
+        "rep_dyn_text": "LAUDO TÉCNICO:\n1. A massa bariônica pura gera apenas {vbar:.2f} km/s, deixando um abismo em relação aos {vobs:.2f} km/s reais.\n2. A TRR calcula o atrito topológico proporcional à circunferência da órbita. Aplicando a constante Beta (0.028006), o arrasto fluídico eleva a velocidade para {vtrr:.2f} km/s.\nRESULTADO: Precisão empírica de {prec:.2f}% atingida sem uso de Matéria Escura.",
+        "rep_opt_text": "LAUDO TÉCNICO:\nA massa visível desvia a luz em apenas {tbar:.2f} arcsec. Sem matéria invisível, a TRR aplica a Refração Temporal do Vácuo (eta_C = {etac:.5f}). O atraso de fase amplia o anel gravitacional para {ttrr:.2f} arcsec, batendo a observação do telescópio. Precisão empírica: {prec:.2f}%.",
+        "rep_red_text": "LAUDO PREDITIVO (AUDITORIA CEGA):\n1. DESAFIO: A massa de lente informada gera uma curvatura clássica irrisória. O Modelo Padrão exigiria halos massivos e cálculos ad hoc.\n2. PREVISÃO TRR: Varrendo o tecido cósmico com base na refração da constante Beta, a equação prediz matematicamente que a galáxia fonte está cravada em z_S = {zs_pred:.4f}.\nRESULTADO: O algoritmo atingiu {prec:.2f}% de convergência teórica. Trata-se de uma predição cega aguardando validação espectrográfica.",
+        "rep_str_text": "LAUDO DE HIDRODINÂMICA:\n1. A astrofísica clássica afirma que os 'gaps' da corrente estelar são colisões com sub-halos invisíveis.\n2. A TRR rastreou a órbita medindo as forças de maré. O Cisalhamento Viscoso atingiu o limite crítico na zona exata de {loc_str}. O gap é um atrito com o fluido do espaço."
     },
     "EN": {
         "code": "EN", "btn_enter": "Enter RRT Engine", "welcome": "Select your language",
@@ -56,15 +56,15 @@ LANG = {
         "r_peri": "Stream Pericenter (kpc)", "r_apo": "Stream Apocenter (kpc)", 
         "calc": "🚀 Process RRT Audit", "clear": "🧹 Clear All", 
         "pdf_btn": "📄 Download Audit Report (PDF)", "details": "📚 View Technical Report",
-        "precision": "Accuracy", "g_bar": "Classical Physics", "g_trr": "RRT Prediction", "g_obs": "Telescope",
+        "precision": "Empirical Accuracy", "precision_red": "Mathematical Convergence", "g_bar": "Classical Physics", "g_trr": "RRT Prediction", "g_obs": "Telescope",
         "info_red": "💡 RRT iterates the gravitational matrix to predict the source galaxy's distance (z_S).",
         "info_str": "💡 RRT maps vacuum tension and reveals the fake sub-halo coordinates.",
         "pred_zs": "Predicted Redshift z_S", "loc_gap": "📌 Fake Sub-halo Coordinates", "no_gap": "No critical rupture",
         "pdf_h1": "REFERENTIAL RELATIVITY THEORY (RRT)", "pdf_h2": "Automated Audit Report", "pdf_footer": "Document generated by RRT Cosmological Engine.",
         "pdf_title_dyn": "SCIENTIFIC AUDIT - DYNAMICS", "pdf_title_opt": "SCIENTIFIC AUDIT - OPTICS", "pdf_title_red": "SCIENTIFIC AUDIT - REDSHIFT", "pdf_title_str": "SCIENTIFIC AUDIT - STREAMS",
-        "rep_dyn_text": "TECHNICAL REPORT:\n1. Baryonic mass yields only {vbar:.2f} km/s, far from the real {vobs:.2f} km/s.\n2. RRT calculates topological friction proportional to orbital circumference. Applying Beta (0.028006), fluid drag elevates velocity to {vtrr:.2f} km/s.\nRESULT: {prec:.2f}% accuracy achieved without Dark Matter.",
-        "rep_opt_text": "TECHNICAL REPORT:\nVisible mass deflects light by only {tbar:.2f} arcsec. RRT applies Time Refraction (eta_C = {etac:.5f}). Phase delay widens the ring to {ttrr:.2f} arcsec. Accuracy: {prec:.2f}%.",
-        "rep_red_text": "PREDICTIVE REPORT:\n1. CHALLENGE: Lens mass generates minimal classical curvature. The Standard Model would require massive halos.\n2. RRT CONVERGENCE: Sweeping cosmic fabric based on Beta refraction, the algorithm predicts the source galaxy is at z_S = {zs_pred:.4f}.\nRESULT: Cross-calibration accuracy of {prec:.2f}%.",
+        "rep_dyn_text": "TECHNICAL REPORT:\n1. Baryonic mass yields only {vbar:.2f} km/s, far from the real {vobs:.2f} km/s.\n2. RRT calculates topological friction proportional to orbital circumference. Applying Beta (0.028006), fluid drag elevates velocity to {vtrr:.2f} km/s.\nRESULT: {prec:.2f}% empirical accuracy achieved without Dark Matter.",
+        "rep_opt_text": "TECHNICAL REPORT:\nVisible mass deflects light by only {tbar:.2f} arcsec. RRT applies Time Refraction (eta_C = {etac:.5f}). Phase delay widens the ring to {ttrr:.2f} arcsec. Empirical Accuracy: {prec:.2f}%.",
+        "rep_red_text": "PREDICTIVE REPORT (BLIND AUDIT):\n1. CHALLENGE: Lens mass generates minimal classical curvature. The Standard Model would require ad hoc massive halos.\n2. RRT PREDICTION: Sweeping cosmic fabric based on Beta refraction, the algorithm mathematically predicts the source galaxy is at z_S = {zs_pred:.4f}.\nRESULT: The engine reached {prec:.2f}% theoretical convergence. This is a blind prediction awaiting spectrographic validation.",
         "rep_str_text": "HYDRODYNAMICS REPORT:\n1. Classical astrophysics claims stream 'gaps' are invisible collisions.\n2. RRT tracked the orbit measuring tidal forces. Viscous Shear hit critical limits exactly at {loc_str}. The gap is vacuum fluid friction."
     },
     "ES": {
@@ -76,19 +76,19 @@ LANG = {
         "r_peri": "Pericentro Corriente (kpc)", "r_apo": "Apocentro Corriente (kpc)", 
         "calc": "🚀 Procesar Auditoría TRR", "clear": "🧹 Limpiar Todo", 
         "pdf_btn": "📄 Descargar Reporte (PDF)", "details": "📚 Ver Dictamen Técnico",
-        "precision": "Precisión", "g_bar": "Física Clásica", "g_trr": "Predicción TRR", "g_obs": "Telescopio",
+        "precision": "Precisión Empírica", "precision_red": "Convergencia Matemática", "g_bar": "Física Clásica", "g_trr": "Predicción TRR", "g_obs": "Telescopio",
         "info_red": "💡 La TRR itera la matriz gravitacional para predecir la distancia de la galaxia fuente (z_S).",
         "info_str": "💡 La TRR mapea la tensión del vacío y revela las coordenadas del falso sub-halo.",
         "pred_zs": "Redshift z_S Previsto", "loc_gap": "📌 Coordenadas del Falso Sub-halo", "no_gap": "Ninguna ruptura crítica",
         "pdf_h1": "TEORIA DE LA RELATIVIDAD REFERENCIAL (TRR)", "pdf_h2": "Reporte de Auditoria Automatizada", "pdf_footer": "Documento generado por el Motor Cosmologico TRR.",
         "pdf_title_dyn": "AUDITORIA CIENTIFICA - DINAMICA", "pdf_title_opt": "AUDITORIA CIENTIFICA - OPTICA", "pdf_title_red": "AUDITORIA CIENTIFICA - REDSHIFT", "pdf_title_str": "AUDITORIA CIENTIFICA - CORRIENTES",
-        "rep_dyn_text": "DICTAMEN TÉCNICO:\n1. La masa bariónica genera solo {vbar:.2f} km/s.\n2. La TRR calcula la fricción topológica. Aplicando Beta (0.028006), el arrastre eleva a {vtrr:.2f} km/s.\nRESULTADO: Precisión de {prec:.2f}% sin Materia Oscura.",
-        "rep_opt_text": "DICTAMEN TÉCNICO:\nMasa visible desvía luz en {tbar:.2f} arcsec. La TRR aplica Refracción Temporal (eta_C = {etac:.5f}). El retraso de fase amplía a {ttrr:.2f} arcsec. Precisión: {prec:.2f}%.",
-        "rep_red_text": "DICTAMEN PREDICTIVO:\nUsando la masa exacta, la TRR aísla la refracción del vacío y predice matemáticamente que la galaxia fuente está en z_S = {zs_pred:.4f}. Precisión: {prec:.2f}%.",
+        "rep_dyn_text": "DICTAMEN TÉCNICO:\n1. La masa bariónica genera solo {vbar:.2f} km/s.\n2. La TRR calcula la fricción topológica. Aplicando Beta (0.028006), el arrastre eleva a {vtrr:.2f} km/s.\nRESULTADO: Precisión empírica de {prec:.2f}% sin Materia Oscura.",
+        "rep_opt_text": "DICTAMEN TÉCNICO:\nMasa visible desvía luz en {tbar:.2f} arcsec. La TRR aplica Refracción Temporal (eta_C = {etac:.5f}). El retraso de fase amplía a {ttrr:.2f} arcsec. Precisión empírica: {prec:.2f}%.",
+        "rep_red_text": "DICTAMEN PREDITIVO:\nUsando la masa exacta, la TRR aísla la refracción y predice matemáticamente que la galaxia fuente está en z_S = {zs_pred:.4f}. RESULTADO: Convergencia del {prec:.2f}%, aguardando validación espectrográfica.",
         "rep_str_text": "MECÁNICA FLUIDA:\nLa astrofísica clásica inventa colisiones invisibles. La TRR rastreó la órbita y detectó Cizallamiento Viscoso crítico en la zona: {loc_str}. El gap es fricción del vacío."
     },
     "FR": {
-        "code": "FR", "btn_enter": "Entrer dans le Moteur TRR", "welcome": "Sélectionnez votre langue",
+        "code": "FR", "btn_enter": "Entrer dans TRR", "welcome": "Sélectionnez votre langue",
         "title": "🌌 Moteur Cosmologique TRR", "author_prefix": "Auteur", "theory_name": "Théorie de la Relativité Référentielle",
         "tab1": "📊 Dynamique Galactique", "tab2": "👁️ Optique Cosmologique", "tab3": "🔭 Prédiction Redshift", "tab4": "☄️ Courants Stellaires",
         "rad": "Rayon (kpc)", "vobs": "Vit. Télescope (km/s)", "vgas": "Vit. Gaz (km/s)", "vdisk": "Vit. Disque (km/s)", "vbulge": "Vit. Bulbe (km/s)",
@@ -96,15 +96,15 @@ LANG = {
         "r_peri": "Péricentre (kpc)", "r_apo": "Apocentre (kpc)", 
         "calc": "🚀 Traiter l'Audit TRR", "clear": "🧹 Tout Effacer", 
         "pdf_btn": "📄 Télécharger Rapport (PDF)", "details": "📚 Voir l'Avis Technique",
-        "precision": "Précision", "g_bar": "Physique Classique", "g_trr": "Prédiction TRR", "g_obs": "Télescope",
+        "precision": "Précision Empirique", "precision_red": "Convergence Mathématique", "g_bar": "Physique Classique", "g_trr": "Prédiction TRR", "g_obs": "Télescope",
         "info_red": "💡 La TRR prédit la distance temporelle (z_S) en utilisant strictement la Masse Photométrique.",
         "info_str": "💡 La TRR cartographie le Cisaillement Visqueux et délivre les coordonnées de rupture.",
         "pred_zs": "Redshift z_S Prédit", "loc_gap": "📌 Coordonnées de Rupture", "no_gap": "Aucune rupture critique",
         "pdf_h1": "THEORIE DE LA RELATIVITE REFERENTIELLE (TRR)", "pdf_h2": "Rapport d'Audit Automatise", "pdf_footer": "Document genere par le Moteur Cosmologique TRR.",
         "pdf_title_dyn": "AUDIT SCIENTIFIQUE - DYNAMIQUE", "pdf_title_opt": "AUDIT SCIENTIFIQUE - OPTIQUE", "pdf_title_red": "AUDIT SCIENTIFIQUE - REDSHIFT", "pdf_title_str": "AUDIT SCIENTIFIQUE - COURANTS",
-        "rep_dyn_text": "RAPPORT TECHNIQUE:\n1. La masse baryonique génère {vbar:.2f} km/s.\n2. La TRR élève la vitesse à {vtrr:.2f} km/s grâce à Beta. Précision: {prec:.2f}%.",
-        "rep_opt_text": "RAPPORT TECHNIQUE:\nLa TRR applique Réfraction Temporelle (eta_C = {etac:.5f}). Déviation amplifiée à {ttrr:.2f} arcsec. Précision: {prec:.2f}%.",
-        "rep_red_text": "PRÉDICTION:\nEn utilisant la masse exacte, la TRR prédit le Redshift Source à z_S = {zs_pred:.4f}. Précision: {prec:.2f}%.",
+        "rep_dyn_text": "RAPPORT TECHNIQUE:\n1. La masse baryonique génère {vbar:.2f} km/s.\n2. La TRR élève la vitesse à {vtrr:.2f} km/s grâce à Beta. Précision empirique: {prec:.2f}%.",
+        "rep_opt_text": "RAPPORT TECHNIQUE:\nLa TRR applique Réfraction Temporelle (eta_C = {etac:.5f}). Déviation amplifiée à {ttrr:.2f} arcsec. Précision empirique: {prec:.2f}%.",
+        "rep_red_text": "PRÉDICTION:\nEn utilisant la masse exacte, la TRR prédit le Redshift Source à z_S = {zs_pred:.4f}. RÉSULTAT: Convergence de {prec:.2f}%, en attente de validation.",
         "rep_str_text": "MÉCANIQUE FLUIDE:\nLa TRR a détecté un Cisaillement Visqueux critique dans la zone: {loc_str}. Les halos noirs sont obsolètes."
     },
     "DE": {
@@ -116,7 +116,7 @@ LANG = {
         "r_peri": "Perizentrum (kpc)", "r_apo": "Apozentrum (kpc)", 
         "calc": "🚀 RRT-Audit durchführen", "clear": "🧹 Alles löschen", 
         "pdf_btn": "📄 Audit-Bericht (PDF)", "details": "📚 Technisches Gutachten",
-        "precision": "Genauigkeit", "g_bar": "Klassische Physik", "g_trr": "RRT Vorhersage", "g_obs": "Teleskop",
+        "precision": "Empirische Genauigkeit", "precision_red": "Mathematische Konvergenz", "g_bar": "Klassische Physik", "g_trr": "RRT Vorhersage", "g_obs": "Teleskop",
         "info_red": "💡 Die RRT prognostiziert die zeitliche Distanz (z_S) streng anhand der Masse.",
         "info_str": "💡 Die RRT kartiert die viskose Scherung und liefert Risskoordinaten.",
         "pred_zs": "Vorhergesagtes Redshift z_S", "loc_gap": "📌 Risskoordinaten", "no_gap": "Kein kritischer Riss",
@@ -124,7 +124,7 @@ LANG = {
         "pdf_title_dyn": "WISSENSCHAFTLICHES AUDIT - DYNAMIK", "pdf_title_opt": "WISSENSCHAFTLICHES AUDIT - OPTIK", "pdf_title_red": "WISSENSCHAFTLICHES AUDIT - REDSHIFT", "pdf_title_str": "WISSENSCHAFTLICHES AUDIT - STROEME",
         "rep_dyn_text": "GUTACHTEN:\n1. Masse erzeugt nur {vbar:.2f} km/s.\n2. RRT-Widerstand erhöht auf {vtrr:.2f} km/s. Genauigkeit: {prec:.2f}%.",
         "rep_opt_text": "GUTACHTEN:\nDie RRT wendet Zeitbrechung an (eta_C = {etac:.5f}). Ablenkung auf {ttrr:.2f} arcsec verstärkt. Genauigkeit: {prec:.2f}%.",
-        "rep_red_text": "VORHERSAGE:\nOhne ad-hoc-Anpassungen prognostiziert die RRT das Quellen-Redshift auf z_S = {zs_pred:.4f}. Genauigkeit: {prec:.2f}%.",
+        "rep_red_text": "VORHERSAGE:\nOhne ad-hoc-Anpassungen prognostiziert die RRT das Quellen-Redshift auf z_S = {zs_pred:.4f}. Konvergenz: {prec:.2f}%.",
         "rep_str_text": "FLUIDMECHANIK:\nDie RRT erkannte kritische viskose Scherung in der Zone: {loc_str}. Gaps sind Vakuumspannung."
     },
     "IT": {
@@ -136,7 +136,7 @@ LANG = {
         "r_peri": "Pericentro (kpc)", "r_apo": "Apocentro (kpc)", 
         "calc": "🚀 Elabora Audit TRR", "clear": "🧹 Pulisci Tutto", 
         "pdf_btn": "📄 Scarica Report (PDF)", "details": "📚 Parere Tecnico",
-        "precision": "Precisione", "g_bar": "Fisica Classica", "g_trr": "Previsione TRR", "g_obs": "Telescopio",
+        "precision": "Precisione Empirica", "precision_red": "Convergenza Matematica", "g_bar": "Fisica Classica", "g_trr": "Previsione TRR", "g_obs": "Telescopio",
         "info_red": "💡 La TRR prevede la distanza temporale (z_S) usando strettamente la Massa Fotometrica.",
         "info_str": "💡 La TRR mappa il Taglio Viscoso e fornisce le coordinate esatte.",
         "pred_zs": "Redshift z_S Previsto", "loc_gap": "📌 Coordinate di Rottura", "no_gap": "Nessuna rottura critica",
@@ -144,7 +144,7 @@ LANG = {
         "pdf_title_dyn": "AUDIT SCIENTIFICO - DINAMICA", "pdf_title_opt": "AUDIT SCIENTIFICO - OTTICA", "pdf_title_red": "AUDIT SCIENTIFICO - REDSHIFT", "pdf_title_str": "AUDIT SCIENTIFICO - CORRENTI",
         "rep_dyn_text": "DIAGNOSI:\nLa massa genera solo {vbar:.2f} km/s. La TRR eleva a {vtrr:.2f} km/s. Precisione: {prec:.2f}%.",
         "rep_opt_text": "DIAGNOSI:\nRifrazione Temporale (eta_C = {etac:.5f}). La TRR amplifica la deviazione a {ttrr:.2f} arcsec. Precisione: {prec:.2f}%.",
-        "rep_red_text": "PREVISIONE:\nUsando la massa esatta, la TRR prevede il Redshift Sorgente in z_S = {zs_pred:.4f}. Precisione: {prec:.2f}%.",
+        "rep_red_text": "PREVISIONE:\nUsando la massa esatta, la TRR prevede il Redshift Sorgente in z_S = {zs_pred:.4f}. Convergenza: {prec:.2f}%.",
         "rep_str_text": "MECCANICA FLUIDA:\nLa TRR ha rilevato Taglio Viscoso critico nella zona: {loc_str}. Aloni oscuri obsoleti."
     },
     "ZH": {
@@ -156,13 +156,15 @@ LANG = {
         "r_peri": "流近星点 (kpc)", "r_apo": "流远星点 (kpc)", 
         "calc": "🚀 运行 RRT 审计", "clear": "🧹 清除所有", 
         "pdf_btn": "📄 下载报告 (PDF - EN)", "details": "📚 查看技术意见",
-        "precision": "精度", "g_bar": "经典物理", "g_trr": "RRT 预测", "g_obs": "望远镜",
+        "precision": "经验精度", "precision_red": "数学收敛", "g_bar": "经典物理", "g_trr": "RRT 预测", "g_obs": "望远镜",
         "info_red": "💡 RRT 严格使用提供的光度质量预测时间距离 (z_S)。",
         "info_str": "💡 RRT 映射粘性剪切并提供精确的破裂坐标。",
         "pred_zs": "预测红移 z_S", "loc_gap": "📌 破裂坐标 (假暗晕)", "no_gap": "没有严重的破裂",
+        "pdf_h1": "REFERENTIAL RELATIVITY THEORY (RRT)", "pdf_h2": "Automated Audit Report", "pdf_footer": "Document generated by RRT Cosmological Engine.",
+        "pdf_title_dyn": "SCIENTIFIC AUDIT - DYNAMICS", "pdf_title_opt": "SCIENTIFIC AUDIT - OPTICS", "pdf_title_red": "SCIENTIFIC AUDIT - REDSHIFT", "pdf_title_str": "SCIENTIFIC AUDIT - STREAMS",
         "rep_dyn_text": "诊断:\n重子质量产生 {vbar:.2f} km/s. RRT 阻力提高到 {vtrr:.2f} km/s. 精度: {prec:.2f}%.",
         "rep_opt_text": "诊断:\nRRT (eta_C = {etac:.5f}) 放大偏转至 {ttrr:.2f} arcsec. 精度: {prec:.2f}%.",
-        "rep_red_text": "预测:\nRRT 隔离真空折射，预测光源红移 (z_S) 为 {zs_pred:.4f}. 精度: {prec:.2f}%.",
+        "rep_red_text": "预测:\nRRT 预测光源红移 (z_S) 为 {zs_pred:.4f}. 理论收敛: {prec:.2f}%.",
         "rep_str_text": "预测流体力学:\nRRT 在区域 {loc_str} 检测到关键粘性剪切. 缝隙纯粹是真空张力."
     },
     "RU": {
@@ -174,13 +176,15 @@ LANG = {
         "r_peri": "Перицентр (кпк)", "r_apo": "Апоцентр (кпк)", 
         "calc": "🚀 Анализ ТРО", "clear": "🧹 Очистить всё", 
         "pdf_btn": "📄 Скачать отчет (PDF - EN)", "details": "📚 Техническое заключение",
-        "precision": "Точность", "g_bar": "Классика", "g_trr": "Прогноз ТРО", "g_obs": "Телескоп",
+        "precision": "Эмпирическая точность", "precision_red": "Математическая сходимость", "g_bar": "Классика", "g_trr": "Прогноз ТРО", "g_obs": "Телескоп",
         "info_red": "💡 ТРО прогнозирует временное расстояние (z_S), строго используя предоставленную массу.",
         "info_str": "💡 ТРО отображает вязкий сдвиг и выдает точные координаты разрыва.",
         "pred_zs": "Прогнозируемый Redshift z_S", "loc_gap": "📌 Координаты разрыва", "no_gap": "Нет критического разрыва",
+        "pdf_h1": "REFERENTIAL RELATIVITY THEORY (RRT)", "pdf_h2": "Automated Audit Report", "pdf_footer": "Document generated by RRT Cosmological Engine.",
+        "pdf_title_dyn": "SCIENTIFIC AUDIT - DYNAMICS", "pdf_title_opt": "SCIENTIFIC AUDIT - OPTICS", "pdf_title_red": "SCIENTIFIC AUDIT - REDSHIFT", "pdf_title_str": "SCIENTIFIC AUDIT - STREAMS",
         "rep_dyn_text": "ДИАГНОЗ:\nБарионная масса дает {vbar:.2f} км/с. Сопротивление ТРО увеличивает скорость до {vtrr:.2f} км/с. Точность: {prec:.2f}%.",
         "rep_opt_text": "ДИАГНОЗ:\nТРО (eta_C = {etac:.5f}) усиливает отклонение до {ttrr:.2f} arcsec. Точность: {prec:.2f}%.",
-        "rep_red_text": "ПРОГНОЗ:\nТРО прогнозирует Redshift источника z_S = {zs_pred:.4f}. Точность: {prec:.2f}%.",
+        "rep_red_text": "ПРОГНОЗ:\nТРО прогнозирует Redshift источника z_S = {zs_pred:.4f}. Сходимость: {prec:.2f}%.",
         "rep_str_text": "ГИДРОДИНАМИКА:\nТРО обнаружила критический сдвиг вакуума в зоне: {loc_str}. Разрывы - это вакуумное натяжение."
     }
 }
@@ -246,7 +250,6 @@ def criar_grafico_stream(raios, arrasto, cisalhamento, limite):
 # GERADOR UNIVERSAL DE PDF
 # ==========================================
 def gerar_pdf(modulo, dict_dados, L_original):
-    # Regra Implacável: Chinês e Russo exportam PDF em Inglês (RRT) para evitar quebra de fonte no FPDF. Demais usam suas próprias siglas localizadas.
     L_pdf = LANG["EN"] if L_original["code"] in ["ZH", "RU"] else L_original
     
     pdf = FPDF()
@@ -441,7 +444,8 @@ else:
         colF.button(L["clear"], on_click=limpar_dados, use_container_width=True, key="btn_clr_red")
         if 'res_red' in st.session_state:
             res = st.session_state['res_red']
-            st.success(f"**{L['precision']}:** {res['prec']:.2f}% | **{L['pred_zs']}:** {res['zs_pred']:.4f}")
+            # Puxa o nome blindado: "Convergência Matemática"
+            st.success(f"**{L.get('precision_red', 'Convergência Matemática')}:** {res['prec']:.2f}% | **{L['pred_zs']}:** {res['zs_pred']:.4f}")
             with st.expander(L["details"]): st.info(L["rep_red_text"].format(**res))
             st.download_button(L["pdf_btn"], data=gerar_pdf("red", res, L), file_name="Report_Redshift.pdf", mime="application/pdf", use_container_width=True, key="p3")
 
