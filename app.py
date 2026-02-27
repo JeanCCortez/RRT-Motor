@@ -80,7 +80,7 @@ LANG = {
         "r_peri": "Pericentro (kpc)", "r_apo": "Apocentro (kpc)", 
         "calc": "🚀 Procesar Auditoría TRR", "clear": "🧹 Limpiar Todo", 
         "pdf_btn": "📄 Descargar Reporte (PDF)", "details": "📚 Ver Dictamen Técnico",
-        "precision": "Precisión Empirica", "precision_red": "Convergencia Matemática", "g_bar": "Física Clásica", "g_trr": "Predicción TRR", "g_obs": "Telescopio",
+        "precision": "Precisión Empírica", "precision_red": "Convergencia Matemática", "g_bar": "Física Clásica", "g_trr": "Predicción TRR", "g_obs": "Telescopio",
         "info_dyn": "💡 La TRR calcula la fricción topológica del vacío para predecir la rotación estelar sin Materia Oscura.",
         "info_opt": "💡 La TRR aplica el Índice de Refracción Temporal para amplificar el desvío usando masa visible absoluta.",
         "info_red": "💡 La TRR itera la matriz gravitacional usando la Masa Total (física de fluidos no recortada) para predecir z_S.",
@@ -152,7 +152,7 @@ LANG = {
         "info_red": "💡 La TRR utilizza la Massa Totale Assoluta per prevedere il tempo-spazio della Sorgente (z_S).",
         "info_str": "💡 La TRR mappa la forza di marea del vuoto, rivelando le coordinate esatte.",
         "pred_zs": "Redshift z_S Previsto", "loc_gap": "📌 Coordinate di Rottura", "no_gap": "Nessuna rottura critica",
-        "pdf_h1": "TEORIA DELLA RELATIVITA REFERENZIALE (TRR)", "pdf_h2": "Rapporto di Audit Automatizzato", "pdf_footer": "Documento generato dal Motore Cosmologico TRR.",
+        "pdf_h1": "TEORIA DELLA RELATIVITA REFERENZIALE (TRR)", "pdf_h2": "Rapporto di Audit Automatizzato", "pdf_footer": "Document generato dal Motore Cosmologico TRR.",
         "pdf_title_dyn": "AUDIT SCIENTIFICO - DINAMICA", "pdf_title_opt": "AUDIT SCIENTIFICO - OTTICA", "pdf_title_red": "AUDIT SCIENTIFICO - REDSHIFT", "pdf_title_str": "AUDIT SCIENTIFICO - CORRENTI",
         "rep_dyn_text": "DIAGNOSI:\nLa massa genera solo {vbar:.2f} km/s. La TRR eleva a {vtrr:.2f} km/s. Precisione empirica: {prec:.2f}%.",
         "rep_opt_text": "DIAGNOSI:\nRifrazione Temporale (eta_C = {etac:.5f}). La TRR amplifica la deviazione a {ttrr:.2f} arcsec. Precisione: {prec:.2f}%.",
@@ -330,12 +330,10 @@ if st.session_state['idioma_selecionado'] is None:
 else:
     L = LANG.get(st.session_state['idioma_selecionado'], LANG["EN"])
     
-    # === CORREÇÃO CRÍTICA AQUI: RENDERIZAÇÃO DA SIDEBAR ===
     with st.sidebar:
-        # A Gaveta de Proveniência DEVE vir antes de qualquer botão de controle de estado para não sumir no rerun
         with st.expander("🗂️ Data Provenance & Official Catalogs", expanded=False):
             st.markdown("""
-            **To ensure independent reproducibility, this engine processes models based on raw data from:**
+            **To ensure independent reproducibility, this engine processes raw data from:**
             * **SDSS DR16Q:** Quasar spatial mapping.
             * **SPARC (CWRU):** Galactic rotation curves.
             * **SLACS Survey:** Strong lensing baryonic masses.
@@ -345,11 +343,9 @@ else:
             
             *⚠️ No ad-hoc dark matter parameters are injected into this engine.*
             """)
-        
         st.markdown("---")
         st.markdown(f"**{L['author_prefix']}:** Jean Cortez\n\n*{L['theory_name']}*")
         st.markdown("---")
-        
         if st.button("⬅️ Idioma / Language"):
             st.session_state['idioma_selecionado'] = None
             st.rerun()
@@ -444,10 +440,8 @@ else:
                 D_L = calcular_D_A(0, r_zl)
                 melhor_erro, zs_pred = float('inf'), 0
                 
-                # A MASSA É ABSOLUTA E A BUSCA VAI ATÉ O LIMITE DO UNIVERSO
                 M_bar_kg = (r_mest * (7.0 if r_cluster else 1.0)) * 1e11 * M_SOL 
                 
-                # O Teto foi removido (agora vai até z = 50.0, além do universo observável)
                 for zs_test in np.arange(r_zl + 0.01, 50.0, 0.05):
                     D_S, D_LS = calcular_D_A(0, zs_test), calcular_D_A(r_zl, zs_test)
                     if D_S <= 0: continue
@@ -461,7 +455,6 @@ else:
                         melhor_erro = erro
                         zs_pred = zs_test
                 
-                # Refinamento fino da predição para maior precisão
                 best_coarse = zs_pred
                 melhor_erro = float('inf')
                 for zs_test in np.arange(max(r_zl + 0.01, best_coarse - 0.1), min(best_coarse + 0.1, 50.0), 0.005):
@@ -477,7 +470,6 @@ else:
                         melhor_erro = erro
                         zs_pred = zs_test
 
-                # Limite do gráfico dinâmico (para não distorcer visualmente se der z=50)
                 limite_grafico = min(zs_pred * 1.5, 30.0) if zs_pred > 10 else zs_pred * 1.5
                 z_vals = np.linspace(r_zl + 0.01, max(limite_grafico, r_zl + 1), 40)
                 t_class, t_trr = [], []
