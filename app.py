@@ -24,7 +24,7 @@ def calcular_D_A(z1, z2):
     return ((299792.458 / 70.0) * integral / (1 + z2)) * 3.086e22
 
 # ==========================================
-# DICIONÁRIO ABSOLUTO (SEM LOOPS)
+# DICIONÁRIO ABSOLUTO 
 # ==========================================
 LANG = {
     "PT": {
@@ -335,6 +335,20 @@ else:
             st.rerun()
         st.markdown("---")
         st.markdown(f"**{L['author_prefix']}:** Jean Cortez\n\n*{L['theory_name']}*")
+        
+        # INJEÇÃO DA PROVENIÊNCIA DOS DADOS AQUI (BLINDAGEM ACADÊMICA)
+        with st.expander("🗂️ Data Provenance & Official Catalogs", expanded=False):
+            st.markdown("""
+            **To ensure independent reproducibility, this engine processes models based on raw data from:**
+            * **SDSS DR16Q:** Quasar spatial mapping (Anisotropy).
+            * **SPARC (CWRU):** Galactic rotation curves.
+            * **SLACS Survey:** Strong lensing baryonic masses.
+            * **ESA Gaia:** Stellar streams kinematics.
+            * **JWST/MAST:** High-z ($z>5$) causality targets.
+            * **LIGO/Virgo:** O4 luminosity distance alerts.
+            
+            *⚠️ No ad-hoc dark matter halos or invisible geometric parameters are injected into this engine.*
+            """)
 
     st.title(L["title"])
     aba1, aba2, aba3, aba4 = st.tabs([L["tab1"], L["tab2"], L["tab3"], L["tab4"]])
