@@ -337,18 +337,22 @@ else:
         st.markdown(f"**{L['author_prefix']}:** Jean Cortez\n\n*{L['theory_name']}*")
         
         # ---> A MUDANÇA ESTÁ AQUI EMBAIXO: A GAVETA DE PROVENIÊNCIA <---
+        with st.sidebar:
+        if st.button("⬅️ Idioma / Language"):
+            st.session_state['idioma_selecionado'] = None
+            st.rerun()
+        st.markdown("---")
+        st.markdown(f"**{L['author_prefix']}:** Jean Cortez\n\n*{L['theory_name']}*")
+        
         with st.expander("🗂️ Data Provenance & Official Catalogs", expanded=False):
             st.markdown("""
-            **To ensure independent reproducibility, this engine processes models based on raw data from:**
-            * **SDSS DR16Q:** Quasar spatial mapping (Anisotropy).
-            * **SPARC (CWRU):** Galactic rotation curves.
-            * **SLACS Survey:** Strong lensing baryonic masses.
-            * **ESA Gaia:** Stellar streams kinematics.
-            * **JWST/MAST:** High-z ($z>5$) causality targets.
-            * **LIGO/Virgo:** O4 luminosity distance alerts.
-            
-            *⚠️ No ad-hoc dark matter halos or invisible geometric parameters are injected into this engine.*
+            **To ensure independent reproducibility, this engine processes raw data from:**
+            * SDSS DR16Q, SPARC (CWRU), SLACS Survey, ESA Gaia, JWST/MAST, LIGO/Virgo.
+            *⚠️ No ad-hoc dark matter parameters are injected into this engine.*
             """)
+
+    st.title(L["title"])
+    aba1, aba2, aba3, aba4 = st.tabs([L["tab1"], L["tab2"], L["tab3"], L["tab4"]])
 
     st.title(L["title"])
     aba1, aba2, aba3, aba4 = st.tabs([L["tab1"], L["tab2"], L["tab3"], L["tab4"]])
@@ -534,3 +538,4 @@ else:
             st.success(f"**{L['loc_gap']}:** {loc_str_ui}")
             with st.expander(L["details"]): st.info(L["rep_str_text"].format(loc_str=loc_str_ui, **res))
             st.download_button(L["pdf_btn"], data=gerar_pdf("str", res, L), file_name="Report_Streams.pdf", mime="application/pdf", use_container_width=True, key="p4")
+
