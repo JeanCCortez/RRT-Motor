@@ -87,7 +87,7 @@ LANG = {
         "info_str": "💡 La TRR mapea la fuerza de marea del vacío, revelando las coordenadas del falso sub-halo.",
         "pred_zs": "Redshift z_S Previsto", "loc_gap": "📌 Coordenadas del Falso Sub-halo", "no_gap": "Ninguna ruptura crítica",
         "pdf_h1": "TEORIA DE LA RELATIVIDAD REFERENCIAL (TRR)", "pdf_h2": "Reporte de Auditoria Automatizada", "pdf_footer": "Documento generado por el Motor Cosmologico TRR.",
-        "pdf_title_dyn": "AUDITORIA CIENTIFICA - DINAMICA", "pdf_title_opt": "AUDITORIA CIENTIFICA - OPTICA", "pdf_title_red": "AUDITORIA CIENTIFICA - REDSHIFT", "pdf_title_str": "AUDITORIA CIENTIFICA - CORRIENTES",
+        "pdf_title_dyn": "AUDITORIA CIENTIFICA - DINAMICA", "pdf_title_opt": "AUDITORIA CIENTIFICA - OPTICA", "pdf_title_red": "AUDITORIA CIENTIFICA - REDSHIFT", "pdf_title_str": "AUDITORIA CIENTIFICA - CORRENTES",
         "rep_dyn_text": "DICTAMEN TÉCNICO:\n1. La masa bariónica genera solo {vbar:.2f} km/s.\n2. La TRR calcula la fricción topológica. Aplicando Beta (0.028006), el arrastre eleva a {vtrr:.2f} km/s. RESULTADO: Precisión empírica de {prec:.2f}% sin Materia Oscura.",
         "rep_opt_text": "DICTAMEN TÉCNICO:\nLa TRR aplica Refracción Temporal (eta_C = {etac:.5f}). El retraso de fase amplía el anillo a {ttrr:.2f} arcsec. Precisión empírica: {prec:.2f}%.",
         "rep_red_text": "DICTAMEN PREDITIVO (CIEGO ESTRICTO):\n1. DESAFÍO: Motor TRR bloqueó la masa total como límite de fluido espacial absoluto.\n2. PREDICCIÓN: La ecuación convergió y predice la galaxia fuente en z_S = {zs_pred:.4f}. RESULTADO: Algoritmo puro aislado de Materia Oscura.",
@@ -336,7 +336,7 @@ else:
         st.markdown("---")
         st.markdown(f"**{L['author_prefix']}:** Jean Cortez\n\n*{L['theory_name']}*")
         
-        # INJEÇÃO DA PROVENIÊNCIA DOS DADOS AQUI (BLINDAGEM ACADÊMICA)
+        # ---> A MUDANÇA ESTÁ AQUI EMBAIXO: A GAVETA DE PROVENIÊNCIA <---
         with st.expander("🗂️ Data Provenance & Official Catalogs", expanded=False):
             st.markdown("""
             **To ensure independent reproducibility, this engine processes models based on raw data from:**
